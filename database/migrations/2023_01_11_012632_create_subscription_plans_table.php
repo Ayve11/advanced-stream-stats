@@ -17,8 +17,10 @@ return new class extends Migration
         Schema::create('subscription_plans', function (Blueprint $table) {
             $table->id();
             $table->enum('type', SubscriptionPlan::$validTypes);
-            $table->string('price');
-            $table->string('duration_in_days');
+            $table->decimal('price');
+            $table->smallInteger('duration_in_days');
+            $table->enum('payment_type', SubscriptionPlan::$validPaymentTypes);
+            $table->string('plan_id')->nullable();
             $table->timestamps();
         });
     }

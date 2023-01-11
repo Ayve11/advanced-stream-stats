@@ -19,6 +19,14 @@ class SubscriptionPlan extends Model
         self::TYPE_YEARLY
     ];
 
+    const PAYMENT_TYPE_ONE_TIME = 'one_time';
+    const PAYMENT_TYPE_SUBSCRIPTION = 'subscription';
+
+    public static $validPaymentTypes = [
+        self::PAYMENT_TYPE_ONE_TIME,
+        self::PAYMENT_TYPE_SUBSCRIPTION
+    ];
+
     protected $fillable = [
         'name',
         'price',
