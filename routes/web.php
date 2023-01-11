@@ -30,6 +30,7 @@ Route::get('/', function () {
 
 Route::get('/dashboard', [DashboardController::class, 'show'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/subscription', [SubscriptionController::class, 'show'])->middleware(['auth', 'verified'])->name('subscription');
+Route::post('/subscription', [SubscriptionController::class, 'create'])->middleware(['auth', 'verified'])->name('subscription.create');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
