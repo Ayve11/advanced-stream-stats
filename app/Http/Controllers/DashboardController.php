@@ -8,7 +8,7 @@ use Inertia\Response;
 
 class DashboardController extends Controller
 {
-    public function dashboard(Request $request) : Response
+    public function show(Request $request) : Response
     {
         $user = $request->user();
         $subscribedUser = $user->hasActiveSubscription();
