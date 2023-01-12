@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignId('subscription_plan_id')->constrained();
             $table->string("braintree_subscription_id")->nullable();
             $table->enum('status', Subscription::$validStatuses);
-            $table->timestamp('expired_at');
+            $table->dateTime('expired_at');
             $table->timestamps();
         });
     }
