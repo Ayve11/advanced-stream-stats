@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Subscription;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,6 +18,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('subscription_plan_id')->constrained();
+            $table->string("braintree_subscription_id");
+            $table->enum('status', Subscription::$validStatuses)->default(Subscription::STATUS_ACTIVE);
             $table->timestamp('expired_at');
             $table->timestamps();
         });

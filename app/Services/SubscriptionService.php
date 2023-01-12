@@ -28,8 +28,10 @@ class SubscriptionService
 
         if($plan->payment_type == SubscriptionPlan::PAYMENT_TYPE_ONE_TIME){
             $response = $this->createOneTimeTransactionSubscription($plan->price, $paymentNonce);
+            $status = Subscription::STATUS_ONE_TIME;
         } else if($plan->payment_type == SubscriptionPlan::PAYMENT_TYPE_SUBSCRIPTION){
             $response = $this->createRepeatableTransactionSubscription($plan->type, $paymentNonce);
+            $status = Subscription::STATUS_ACTIVE;
         } else {
             throw new NotImplementedException();
         }
@@ -39,10 +41,19 @@ class SubscriptionService
         Subscription::create([
             "user_id" => $user->id,
             "subscription_plan_id" => $plan->id,
+            "braintree_subscription_id" => $response->subscription->id,
+            "status" => $status,
             "expired_at" => now()->addDays($plan->duration_in_days)
         ]);
         
         return $response;
+    }
+
+    public function cancelSubscription(Subscription $subscription){
+        $this->braintreeClient->cancelSubscription($subscription->braintree_subscription_id);
+        $subscription->status = Subscription::STATUS_CANCELLED;
+        $subscription->save();
+        return $subscription;
     }
 
     private function createOneTimeTransactionSubscription($price, $paymentNonce){

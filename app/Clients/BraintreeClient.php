@@ -2,6 +2,7 @@
 
 namespace App\Clients;
 
+use App\Exceptions\ExternalCallException;
 use Braintree\Gateway;
 
 class BraintreeClient
@@ -24,31 +25,45 @@ class BraintreeClient
     }
 
     public function createSaleTransaction($amount, $nonce){
-        return $this->gateway->transaction()->sale([
+        $response = $this->gateway->transaction()->sale([
             'amount' => $amount,
             'paymentMethodNonce' => $nonce,
             'options' => [
               'submitForSettlement' => True
             ]
           ]);
+        if(isset($response->success) && !$response->success) throw new ExternalCallException("Could not create sale transaction");
+        return $response;
     }
 
     public function createSubscription($planId, $paymentMethodToken){
-        return $this->gateway->subscription()->create([
+        $response = $this->gateway->subscription()->create([
             'planId' => $planId,
             'paymentMethodToken' => $paymentMethodToken,
         ]);
+        if(isset($response->success) && !$response->success) throw new ExternalCallException("Cound not create subscription");
+        return $response;
+    }
+    
+    public function cancelSubscription($subscriptionId){
+        $response = $this->gateway->subscription()->cancel($subscriptionId);
+        if(isset($response->success) && !$response->success) throw new ExternalCallException("Could not cancel subscription");
+        return $response;
     }
 
     public function createCustomer($email, $nonce){
-        return $this->gateway->customer()->create([
+        $response = $this->gateway->customer()->create([
             'email' => $email,
             'paymentMethodNonce' => $nonce,
           ]);
+        if(isset($response->success) && !$response->success) throw new ExternalCallException("Could not create customer");
+        return $response;
     }
     
     public function findCustomer($customerId){
-        return $this->gateway->customer()->find($customerId);
+        $response = $this->gateway->customer()->find($customerId);
+        if(isset($response->success) && !$response->success) throw new ExternalCallException("Could not find customer");
+        return $response;
     }
 
 }
