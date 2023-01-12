@@ -23,7 +23,6 @@ class Subscription extends Model
     ];
 
     protected $fillable = [
-        'expired_at',
         'user_id',
         'subscription_plan_id',
         'braintree_subscription_id'

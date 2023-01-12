@@ -29,9 +29,9 @@ class SubscriptionService
         $user = Auth::user();
         $subscription = (new Subscription())->fill([
             "user_id" => $user->id,
-            "subscription_plan_id" => $plan->id,
-            "expired_at" => now()->addDays($plan->duration_in_days)
+            "subscription_plan_id" => $plan->id
         ]);
+        $subscription->expired_at = now()->addDays($plan->duration_in_days);
         if($plan->payment_type == SubscriptionPlan::PAYMENT_TYPE_ONE_TIME){
             $response = $this->createOneTimeTransactionSubscription($plan->price, $paymentNonce);
             $subscription->status = Subscription::STATUS_ONE_TIME;
