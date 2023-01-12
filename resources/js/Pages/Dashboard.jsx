@@ -32,7 +32,7 @@ export default function Dashboard(props) {
                             {props.statistics.todaySubscriptions}
                         </StatisticsCard>
                         <StatisticsCard header="Current stream time">
-                            {props.statistics.currentStreamTime}
+                            {props.statistics.currentStreamTime}h
                         </StatisticsCard>
 
                     </div>
@@ -50,7 +50,7 @@ export default function Dashboard(props) {
                                 {props.statistics.averageDailySubscriptions}
                             </StatisticsCard>
                             <StatisticsCard header="Average daily stream time">
-                                {props.statistics.averageDailyStreamTime}
+                                {props.statistics.averageDailyStreamTime}h
                             </StatisticsCard>
 
                             <StatisticsCard header="All viewers">
@@ -63,7 +63,7 @@ export default function Dashboard(props) {
                                 {props.statistics.allSubscriptions}
                             </StatisticsCard>
                             <StatisticsCard header="All stream time">
-                                {props.statistics.allStreamTime}
+                                {props.statistics.allStreamTime}h
                             </StatisticsCard>
 
                         </div>
