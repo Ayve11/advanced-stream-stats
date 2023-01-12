@@ -18,8 +18,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('subscription_plan_id')->constrained();
-            $table->string("braintree_subscription_id");
-            $table->enum('status', Subscription::$validStatuses)->default(Subscription::STATUS_ACTIVE);
+            $table->string("braintree_subscription_id")->nullable();
+            $table->enum('status', Subscription::$validStatuses);
             $table->timestamp('expired_at');
             $table->timestamps();
         });

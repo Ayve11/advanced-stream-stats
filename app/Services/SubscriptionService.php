@@ -26,25 +26,23 @@ class SubscriptionService
     {
         $plan = SubscriptionPlan::where('type', $planType)->first();
 
+        $user = Auth::user();
+        $subscription = (new Subscription())->fill([
+            "user_id" => $user->id,
+            "subscription_plan_id" => $plan->id,
+            "expired_at" => now()->addDays($plan->duration_in_days)
+        ]);
         if($plan->payment_type == SubscriptionPlan::PAYMENT_TYPE_ONE_TIME){
             $response = $this->createOneTimeTransactionSubscription($plan->price, $paymentNonce);
-            $status = Subscription::STATUS_ONE_TIME;
+            $subscription->status = Subscription::STATUS_ONE_TIME;
         } else if($plan->payment_type == SubscriptionPlan::PAYMENT_TYPE_SUBSCRIPTION){
             $response = $this->createRepeatableTransactionSubscription($plan->type, $paymentNonce);
-            $status = Subscription::STATUS_ACTIVE;
+            $subscription->status = Subscription::STATUS_ACTIVE;
+            $subscription->braintree_subscription_id = $response->subscription->id;
         } else {
             throw new NotImplementedException();
         }
-
-        $user = Auth::user();
-        
-        Subscription::create([
-            "user_id" => $user->id,
-            "subscription_plan_id" => $plan->id,
-            "braintree_subscription_id" => $response->subscription->id,
-            "status" => $status,
-            "expired_at" => now()->addDays($plan->duration_in_days)
-        ]);
+        $subscription->save();
         
         return $response;
     }
